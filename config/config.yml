@@ -1,0 +1,6 @@
+rest:
+  ssl: true
+  host: crisdemo.domidexx.in
+  port: 443
+  nameSpace: /server
+  ssrBaseUrl: http://127.0.0.1:8080/server

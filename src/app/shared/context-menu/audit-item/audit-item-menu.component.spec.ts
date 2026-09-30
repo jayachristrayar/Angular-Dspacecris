@@ -1,0 +1,96 @@
+import {
+  ComponentFixture,
+  TestBed,
+  waitForAsync,
+} from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import {
+  TranslateLoader,
+  TranslateModule,
+} from '@ngx-translate/core';
+import { getTestScheduler } from 'jasmine-marbles';
+import { of } from 'rxjs';
+import { TestScheduler } from 'rxjs/testing';
+
+import { AuthorizationDataService } from '../../../core/data/feature-authorization/authorization-data.service';
+import { DSpaceObject } from '../../../core/shared/dspace-object.model';
+import { DSpaceObjectType } from '../../../core/shared/dspace-object-type.model';
+import { Item } from '../../../core/shared/item.model';
+import { TranslateLoaderMock } from '../../mocks/translate-loader.mock';
+import { AuditItemMenuComponent } from './audit-item-menu.component';
+
+describe('AuditItemMenuComponent', () => {
+  let component: AuditItemMenuComponent;
+  let componentAsAny: any;
+  let fixture: ComponentFixture<AuditItemMenuComponent>;
+  let scheduler: TestScheduler;
+  let dso: DSpaceObject;
+
+  const authorizationDataServiceStub = jasmine.createSpyObj('authorizationDataService', {
+    isAuthorized: jasmine.createSpy('isAuthorized'),
+  });
+
+  beforeEach(waitForAsync(() => {
+    dso = Object.assign(new Item(), {
+      id: 'test-item',
+      _links: {
+        self: { href: 'test-item-selflink' },
+      },
+    });
+
+    TestBed.configureTestingModule({
+      imports: [
+        RouterTestingModule.withRoutes([]),
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useClass: TranslateLoaderMock,
+          },
+        }),
+        AuditItemMenuComponent,
+      ],
+      providers: [
+        { provide: 'contextMenuObjectProvider', useValue: dso },
+        { provide: 'contextMenuObjectTypeProvider', useValue: DSpaceObjectType.ITEM },
+        { provide: AuthorizationDataService, useValue: authorizationDataServiceStub },
+      ],
+    }).compileComponents();
+  }));
+
+  beforeEach(() => {
+    scheduler = getTestScheduler();
+    fixture = TestBed.createComponent(AuditItemMenuComponent);
+    component = fixture.componentInstance;
+    componentAsAny = fixture.componentInstance;
+    component.contextMenuObject = dso;
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  describe('when the user is authorized', () => {
+    beforeEach(() => {
+      (authorizationDataServiceStub.isAuthorized as jasmine.Spy).and.returnValue(of(true));
+      fixture.detectChanges();
+    });
+    it('should render a button', () => {
+      const link = fixture.debugElement.query(By.css('button'));
+      expect(link).not.toBeNull();
+    });
+
+  });
+
+  describe('when the user is not authorized', () => {
+    beforeEach(() => {
+      (authorizationDataServiceStub.isAuthorized as jasmine.Spy).and.returnValue(of(false));
+      fixture.detectChanges();
+    });
+    it('should not render a button', () => {
+      const link = fixture.debugElement.query(By.css('button'));
+      expect(link).toBeNull();
+    });
+
+  });
+});

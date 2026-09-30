@@ -1,0 +1,14 @@
+@if (canViewInWorkflowSinceStatistics$ | async) {
+  <div >
+    @if (canViewInWorkflowForDate$ | async) {
+      <div>
+        {{'mydspace.results.in-workflow-for' | translate}} {{inWorkflowFor$ | async}}
+      </div>
+    }
+    @if (canViewInWorkflowSinceDate$ | async) {
+      <div>
+        {{'mydspace.results.in-workflow-since' | translate}} {{inWorkflowSince$ | async}}
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,20 @@
+<div class="notifications-wrapper position-fixed"
+  [ngClass]="position"
+  (mouseenter)="this.isPaused$.next(true);"
+  (mouseleave)="this.isPaused$.next(false);">
+  @for (a of notifications; track a; let i = $index) {
+    <ds-notification
+      class="notification"
+      [notification]="a" [isPaused$]="isPaused$">
+    </ds-notification>
+  }
+</div>
+
+<div class="notifications-wrapper position-fixed bottom right">
+  @for (procNotification of processNotifications; track procNotification; let ix = $index) {
+    <ds-process-notification
+      class="notification"
+      [notification]="procNotification">
+    </ds-process-notification>
+  }
+</div>

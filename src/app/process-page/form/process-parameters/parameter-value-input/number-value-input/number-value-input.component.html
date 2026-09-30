@@ -1,0 +1,11 @@
+<input required #string="ngModel" type="number" name="number-value-{{index}}" class="form-control" id="number-value-{{index}}" [ngModel]="value" (ngModelChange)="setValue($event)"/>
+@if (string.invalid && (string.dirty || string.touched)) {
+  <div
+    class="alert alert-danger validation-error">
+    @if (string.errors.required) {
+      <div>
+        {{'process.new.parameter.number.required' | translate}}
+      </div>
+    }
+  </div>
+}

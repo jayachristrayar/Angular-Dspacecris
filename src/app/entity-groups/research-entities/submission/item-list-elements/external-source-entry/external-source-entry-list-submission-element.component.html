@@ -1,0 +1,88 @@
+<div class="d-inline-block">
+  <div class="lead item-list-title dont-break-out text-info">{{object.display}}</div>
+  @if (uri) {
+    <div><a target="_blank" [href]="uri.value">{{uri.value}}</a></div>
+  }
+  @if (issued || contributors?.length) {
+    <div data-test="issued-contributor" class="d-flex align-items-center text-muted">
+      @if (issued) {
+        <span data-test="issued" class="item-list-date">({{issued.value | date: 'yyyy-MM-dd'}})&nbsp;</span>
+      }
+      @if (contributors?.length) {
+        <ds-truncatable [id]="object.id">
+          <ds-truncatable-part [id]="object.id" [minLines]="1">
+            @for (contributor of contributors; track contributor; let last = $last) {
+              <span data-test="contributors" class="item-list-authors">
+                {{contributor.value}}@if (!last) {
+                <span>; </span>
+              }
+            </span>
+          }
+        </ds-truncatable-part>
+      </ds-truncatable>
+    }
+  </div>
+}
+@if (abstract) {
+  <div data-test="abstract" class="item-list-abstract">
+    <ds-truncatable [id]="object.id">
+      <ds-truncatable-part [id]="object.id" [minLines]="3">
+        <span>{{abstract.value}}</span>
+      </ds-truncatable-part>
+    </ds-truncatable>
+  </div>
+}
+@if (identifiers?.length) {
+  <div data-test="identifiers" class="text-muted">
+    <ds-truncatable [id]="object.id">
+      <ds-truncatable-part [id]="object.id" [minLines]="1">
+        @for (identifier of identifiers; track identifier; let last = $last) {
+          <span>
+            {{identifier.value}}@if (!last) {
+            <span>; </span>
+          }
+        </span>
+      }
+    </ds-truncatable-part>
+  </ds-truncatable>
+</div>
+}
+@if (object?.matchObjects?.length > 0) {
+  <div>
+    <p>
+      <button type="button" class="btn btn-link p-0" (click)="collapse.toggle()" [attr.aria-expanded]="!isCollapsed">
+        <span class="badge bg-secondary">
+          {{ object.matchObjects.length }}
+        </span>
+        {{'submission.sections.external-source.duplicate-matches.header' | translate}}
+      </button>
+    </p>
+    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" [id]="object.id">
+      <div class="card p-1">
+        @for (match of object.matchObjects | slice: (pageConfig.currentPage-1) * pageConfig.pageSize : pageConfig.currentPage * pageConfig.pageSize; track match) {
+          <ds-item-list-preview [item]="match"
+            [object]="$any(itemPreviewObject)"
+            [metadataList]="metadataList"
+            [showLabel]="showLabel"
+            [showMetrics]="showMetrics"
+            [showThumbnails]="showThumbnails"
+            [showCorrection]="showCorrection">
+          </ds-item-list-preview>
+          <div class="offset-2">
+            <a class="btn btn-primary mt-1" ngbTooltip="{{'submission.workflow.generic.view-help' | translate}}"
+              [routerLink]="getItemRoute(match)" target="_blank">
+              <i class="fa fa-info-circle"></i> {{"submission.workflow.generic.view" | translate}}
+            </a>
+          </div>
+          <hr>
+          }
+          <div class="d-flex justify-content-center">
+            <ngb-pagination [(page)]="pageConfig.currentPage" [pageSize]="pageConfig.pageSize"
+              [collectionSize]="object.matchObjects.length">
+            </ngb-pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

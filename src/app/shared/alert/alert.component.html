@@ -1,0 +1,33 @@
+@if (!isDismissed) {
+  <div class="alert {{type}} fade show w-100" role="alert" [class.alert-dismissible]="dismissible" [@enterLeave]="animate">
+    @if (dismissible) {
+      <button type="button" class="btn-close" data-bs-dismiss="alert" attr.aria-label="{{'alert.close.aria' | translate}}" (click)="dismiss()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    }
+    <div class="d-flex justify-content-between flex-column">
+      @if (collapsible) {
+        <div>
+          <ds-truncatable [id]="truncatableId">
+            <ds-truncatable-part [minLines]="3" [background]="'transparent'" [id]="truncatableId">
+              @if (content) {
+                  <span [innerHTML]="content | translate"></span>
+              }
+              <ng-content></ng-content>
+            </ds-truncatable-part>
+          </ds-truncatable>
+        </div>
+      }
+
+      @if (!collapsible) {
+      <div>
+        @if (content) {
+          <span [innerHTML]="content | translate"></span>
+        }
+        <ng-content></ng-content>
+      </div>
+      }
+
+    </div>
+  </div>
+}

@@ -1,0 +1,104 @@
+:host {
+ --ds-header-icon-color: #FFFFFF;
+  --ds-header-icon-color-hover: #2DA9DF;
+
+
+  #main-site-header {
+    min-height: var(--ds-header-height);
+
+    @include media-breakpoint-up(md) {
+      height: var(--ds-header-height);
+    }
+
+    // Domidexx Deep Navy
+    background: #123044;
+
+    // Domidexx Gold accent
+    border-bottom: 3px solid #F2B321;
+
+    &-container {
+      min-height: var(--ds-header-height);
+    }
+  }
+
+  /*
+   * DOMIDEXX LOGO
+   */
+
+  img#header-logo {
+    height: 58px;
+    width: auto;
+    max-width: 190px;
+    object-fit: contain;
+    display: block;
+  }
+
+  /*
+   * HEADER LEFT SECTION
+   */
+
+  #header-left {
+    gap: 1.25rem;
+  }
+
+  #header-left > a {
+    display: flex !important;
+    align-items: center;
+    flex-shrink: 0;
+    padding: 0.25rem 0;
+  }
+
+  /*
+   * DESKTOP NAVIGATION
+   */
+
+  #desktop-navbar {
+    margin-left: 0.5rem;
+
+    ::ng-deep .nav-link {
+      color: #ffffff;
+      transition: color 0.2s ease;
+    }
+
+    ::ng-deep .nav-link:hover,
+    ::ng-deep .nav-link:focus {
+      color: #2DA9DF;
+    }
+  }
+
+  /*
+   * SEARCH AND HEADER ACTIONS
+   */
+
+  #header-right {
+    color: #ffffff;
+  }
+
+  /*
+   * MOBILE MENU BUTTON
+   */
+
+  button#navbar-toggler {
+    color: #ffffff;
+
+    &:hover,
+    &:focus {
+      color: #2DA9DF;
+    }
+  }
+
+  /*
+   * MOBILE LOGO
+   */
+
+  @include media-breakpoint-down(md) {
+    img#header-logo {
+      height: 48px;
+      max-width: 150px;
+    }
+
+    #header-left {
+      gap: 0.75rem;
+    }
+  }
+}

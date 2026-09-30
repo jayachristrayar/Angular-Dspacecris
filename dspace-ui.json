@@ -1,0 +1,15 @@
+{
+  "apps": [
+    {
+      "name": "dspace-ui",
+      "cwd": "/home/dspace/dspace-angular-dspace-cris-2025.02.00",
+      "script": "dist/server/main.js",
+      "instances": 1,
+      "exec_mode": "fork",
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
+

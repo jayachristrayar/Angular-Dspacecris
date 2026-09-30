@@ -1,0 +1,6 @@
+@if ((canShow$ | async)) {
+  <button class="dropdown-item" (click)="createNewVersion()">
+    <span [innerHtml]="'item.page.version.create' | translate">
+    </span>
+  </button>
+}

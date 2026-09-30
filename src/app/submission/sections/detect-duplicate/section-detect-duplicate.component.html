@@ -1,0 +1,36 @@
+@if (isLoading) {
+  <ds-loading message="Loading..."></ds-loading>
+}
+
+@if ((getSectionStatus() | async) || (config$ | async) === undefined || (config$ | async) === null) {
+  <ds-alert [type]="AlertTypeEnum.Info" [content]="('submission.sections.detect-duplicate.disclaimer-no-match' | translate)"></ds-alert>
+}
+
+@if ((getSectionStatus() | async) !== true && (config$ | async)) {
+  <ds-alert [type]="AlertTypeEnum.Warning" [content]="(disclaimer | async)"></ds-alert>
+  <ds-pagination
+    [paginationOptions]="(config$ | async)"
+    [collectionSize]="(getTotalMatches() | async)"
+    [sortOptions]="sortConfig"
+    [hideGear]="true"
+    [hidePagerWhenSinglePage]="false"
+    [retainScrollPosition]="true">
+    <ul class="list-unstyled" *ngVar="(config$ | async) as config">
+      @for (item of (sectionData$ | async)?.matches | dsObjNgFor
+        | paginate: {id: config.id, itemsPerPage: config.pageSize, currentPage: config.currentPage}; track item; let i = $index; let l = $last) {
+        <li
+          class="mt-4 mb-4"
+          [class.border-bottom]="!l">
+          <ds-duplicate-match
+            *ngVar="(i + (config.currentPage-1)*config.pageSize) as totalIndex"
+            [sectionId]="sectionData.id"
+            [match]="item.value"
+            [readOnly]="isReadOnly()"
+            [submissionId]="submissionId"
+            [index]="$any(totalIndex)"
+          [itemId]="item.key"></ds-duplicate-match>
+        </li>
+      }
+    </ul>
+  </ds-pagination>
+}

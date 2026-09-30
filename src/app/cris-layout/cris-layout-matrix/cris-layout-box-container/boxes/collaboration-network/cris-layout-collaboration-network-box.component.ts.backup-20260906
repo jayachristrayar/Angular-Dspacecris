@@ -1,0 +1,251 @@
+import { CommonModule } from '@angular/common';
+import {
+  Component,
+  Inject,
+  OnInit,
+} from '@angular/core';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { Observable, forkJoin, of } from 'rxjs';
+import {
+  catchError,
+  map,
+  switchMap,
+} from 'rxjs/operators';
+
+import { RelationshipDataService } from '../../../../../core/data/relationship-data.service';
+import { Item } from '../../../../../core/shared/item.model';
+import { CrisLayoutBox } from '../../../../../core/layout/models/box.model';
+import { CrisLayoutBoxModelComponent } from '../../../../models/cris-layout-box-component.model';
+import {
+  getFirstSucceededRemoteData,
+  getRemoteDataPayload,
+} from '../../../../../core/shared/operators';
+
+interface CollaborationNode {
+  id: string;
+  name: string;
+  count: number;
+  x: number;
+  y: number;
+}
+
+interface CollaborationLink {
+  source: string;
+  target: string;
+  count: number;
+}
+
+@Component({
+  selector: 'ds-cris-layout-collaboration-network-box',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './cris-layout-collaboration-network-box.component.html',
+  styleUrls: ['./cris-layout-collaboration-network-box.component.scss'],
+})
+export class CrisLayoutCollaborationNetworkBoxComponent
+  extends CrisLayoutBoxModelComponent
+  implements OnInit {
+
+  nodes: CollaborationNode[] = [];
+  links: CollaborationLink[] = [];
+
+  loading = true;
+  hasCollaborators = false;
+
+  constructor(
+    protected translateService: TranslateService,
+    protected relationshipService: RelationshipDataService,
+    protected router: Router,
+    @Inject('boxProvider') public boxProvider: CrisLayoutBox,
+    @Inject('itemProvider') public itemProvider: Item,
+  ) {
+    super(translateService, boxProvider, itemProvider);
+  }
+
+  ngOnInit(): void {
+    super.ngOnInit();
+
+    this.loadNetwork().subscribe({
+      next: (result) => {
+        this.nodes = result.nodes;
+        this.links = result.links;
+        this.hasCollaborators = this.nodes.length > 1;
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.hasCollaborators = false;
+      },
+    });
+  }
+
+  private loadNetwork(): Observable<{
+    nodes: CollaborationNode[];
+    links: CollaborationLink[];
+  }> {
+    const person = this.item;
+
+    return this.relationshipService
+      .getRelatedItemsByLabel(
+        person,
+        'isPublicationOfAuthor',
+        { elementsPerPage: 100 },
+      )
+      .pipe(
+        getFirstSucceededRemoteData(),
+        getRemoteDataPayload(),
+        switchMap((publicationPage) => {
+          const publications = publicationPage?.page || [];
+
+          if (publications.length === 0) {
+            return of({
+              nodes: this.createPersonOnlyNode(person),
+              links: [],
+            });
+          }
+
+          return this.loadAuthorsFromPublications(publications, person);
+        }),
+        catchError(() => of({
+          nodes: this.createPersonOnlyNode(person),
+          links: [],
+        })),
+      );
+  }
+
+  private loadAuthorsFromPublications(
+    publications: Item[],
+    person: Item,
+  ): Observable<{
+    nodes: CollaborationNode[];
+    links: CollaborationLink[];
+  }> {
+    const collaborationMap = new Map<string, {
+      item: Item;
+      count: number;
+    }>();
+
+    let completed = 0;
+
+    return new Observable((subscriber) => {
+      publications.forEach((publication) => {
+        this.relationshipService
+          .getRelatedItemsByLabel(
+            publication,
+            'isAuthorOfPublication',
+            { elementsPerPage: 100 },
+          )
+          .pipe(
+            getFirstSucceededRemoteData(),
+            getRemoteDataPayload(),
+            catchError(() => of({ page: [] } as any)),
+          )
+          .subscribe((authorPage: any) => {
+            const authors: Item[] = authorPage?.page || [];
+
+            authors.forEach((author) => {
+              if (!author || author.uuid === person.uuid) {
+                return;
+              }
+
+              const existing = collaborationMap.get(author.uuid);
+
+              if (existing) {
+                existing.count++;
+              } else {
+                collaborationMap.set(author.uuid, {
+                  item: author,
+                  count: 1,
+                });
+              }
+            });
+
+            completed++;
+
+            if (completed === publications.length) {
+              subscriber.next(
+                this.buildGraph(person, collaborationMap),
+              );
+              subscriber.complete();
+            }
+          });
+      });
+    });
+  }
+
+  private buildGraph(
+    person: Item,
+    collaborationMap: Map<string, { item: Item; count: number }>,
+  ): {
+    nodes: CollaborationNode[];
+    links: CollaborationLink[];
+  } {
+    const collaborators = Array.from(collaborationMap.entries())
+      .sort((a, b) => b[1].count - a[1].count)
+      .slice(0, 30);
+
+    const centerX = 400;
+    const centerY = 250;
+
+    const nodes: CollaborationNode[] = [
+      {
+        id: person.uuid,
+        name: this.getItemName(person),
+        count: 0,
+        x: centerX,
+        y: centerY,
+      },
+    ];
+
+    const links: CollaborationLink[] = [];
+
+    collaborators.forEach(([uuid, data], index) => {
+      const angle = (2 * Math.PI * index) / collaborators.length;
+      const radius = 180;
+
+      nodes.push({
+        id: uuid,
+        name: this.getItemName(data.item),
+        count: data.count,
+        x: centerX + Math.cos(angle) * radius,
+        y: centerY + Math.sin(angle) * radius,
+      });
+
+      links.push({
+        source: person.uuid,
+        target: uuid,
+        count: data.count,
+      });
+    });
+
+    return { nodes, links };
+  }
+
+  private createPersonOnlyNode(person: Item): {
+    nodes: CollaborationNode[];
+    links: CollaborationLink[];
+  } {
+    return {
+      nodes: [{
+        id: person.uuid,
+        name: this.getItemName(person),
+        count: 0,
+        x: 400,
+        y: 250,
+      }],
+      links: [],
+    };
+  }
+
+  private getItemName(item: Item): string {
+    return item.firstMetadataValue('dc.title')
+      || item.firstMetadataValue('crisrp.name')
+      || item.name
+      || 'Unknown researcher';
+  }
+
+  openPerson(uuid: string): void {
+    this.router.navigate(['/entities/person', uuid]);
+  }
+}

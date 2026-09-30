@@ -1,0 +1,89 @@
+<div class="collaboration-network">
+
+  @if (loading) {
+    <div class="network-loading">
+      Loading collaboration network...
+    </div>
+  }
+
+  @if (!loading && !hasCollaborators) {
+    <div class="network-empty">
+      No co-author collaborations found.
+    </div>
+  }
+
+  @if (!loading && hasCollaborators) {
+
+    <div class="network-canvas">
+
+      <svg
+        viewBox="0 0 800 500"
+        preserveAspectRatio="xMidYMid meet">
+
+        @for (link of links; track link.source + '-' + link.target) {
+
+          @let source = getNode(link.source);
+          @let target = getNode(link.target);
+
+          @if (source && target) {
+
+            <line
+              [attr.x1]="source.x"
+              [attr.y1]="source.y"
+              [attr.x2]="target.x"
+              [attr.y2]="target.y"
+              class="network-link"
+              [attr.stroke-width]="1 + link.count">
+            </line>
+
+          }
+        }
+
+        @for (node of nodes; track node.id) {
+
+          <g
+            class="network-node"
+            [class.central-node]="node.id === item.uuid"
+            (click)="openPerson(node.id)"
+            [attr.transform]="'translate(' + node.x + ',' + node.y + ')'">
+
+            <circle
+              [attr.r]="node.id === item.uuid ? 32 : 22">
+            </circle>
+
+            <text
+              text-anchor="middle"
+              dy="42">
+              {{ node.name }}
+            </text>
+
+            @if (node.count > 0) {
+              <text
+                text-anchor="middle"
+                dy="58"
+                class="publication-count">
+                {{ node.count }} collaboration{{ node.count === 1 ? '' : 's' }}
+              </text>
+            }
+
+          </g>
+        }
+
+      </svg>
+
+    </div>
+
+    <div class="network-legend">
+      <span>
+        Click a researcher to open their profile
+      </span>
+
+      <span>
+        Line thickness = shared publications
+      </span>
+    </div>
+
+  }
+
+</div>
+

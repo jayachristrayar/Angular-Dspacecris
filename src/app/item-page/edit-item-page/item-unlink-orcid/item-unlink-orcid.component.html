@@ -1,0 +1,37 @@
+<div class="container">
+
+  <h2>{{'item.edit.unlink-orcid.head' | translate }}</h2>
+  <p>{{'item.edit.unlink-orcid.description' | translate}}</p>
+
+  @if (!isLinkedToOrcid()) {
+    <ds-alert [type]="'alert-info'" [content]="'item.edit.unlink-orcid.not-linked-to-orcid'"></ds-alert>
+  }
+
+  @if (isLinkedToOrcid()) {
+    <div class="row">
+      <ds-modify-item-overview [item]="item"></ds-modify-item-overview>
+    </div>
+  }
+
+  @if (isLinkedToOrcid()) {
+    <button (click)="unlinkOrcid()" class="btn btn-danger">
+      @if (!processing) {
+        <span>
+          <i class='fas fa-unlink'></i>
+          {{'item.edit.unlink-orcid.unlink' | translate}}
+        </span>
+      }
+      @if (processing) {
+        <span>
+          <i class='fas fa-circle-notch fa-spin'></i>
+          {{'item.edit.unlink-orcid.processing' | translate}}
+        </span>
+      }
+    </button>
+  }
+
+  <button [routerLink]="[(itemPageRoute$ | async), 'edit']" class="btn btn-outline-secondary">
+    {{'item.edit.unlink-orcid.cancel' | translate}}
+  </button>
+
+</div>

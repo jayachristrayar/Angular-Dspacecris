@@ -1,0 +1,21 @@
+::ng-deep .tooltip-inner {
+  text-align:left;
+}
+
+label {
+  cursor: pointer;
+}
+
+.input-group > .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.input-group > .btn:last-child:not(:last-child):not(.dropdown-toggle) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.btn + .btn {
+  margin-left: -1px;
+}

@@ -1,0 +1,23 @@
+@include media-breakpoint-down(lg) {
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+:host {
+    --bs-gutter-x: .75rem;
+}
+
+::ng-deep .search-controls {
+    margin-bottom: var(--bs-spacer);
+}
+
+.mb-40 {
+  margin-bottom: 40px;
+}
+
+.search-form-flex-wrapper {
+  column-gap: 12px;
+  row-gap: 12px;
+}

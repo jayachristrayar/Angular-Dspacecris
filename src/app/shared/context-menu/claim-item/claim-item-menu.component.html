@@ -1,0 +1,12 @@
+@if ((claimable$ | async)) {
+  <button class="dropdown-item"
+    (click)="claim()">
+    @if ((isProcessing$ | async) !== true) {
+      {{'context-menu.actions.claim.btn' | translate}}
+    } @else {
+      <i class="fa fa-spinner fa-spin fa-fw"></i>
+      <span class="sr-only">Loading...</span>
+    }
+  </button>
+}
+

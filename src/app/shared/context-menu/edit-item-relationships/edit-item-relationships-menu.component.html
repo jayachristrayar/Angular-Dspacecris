@@ -1,0 +1,8 @@
+@if ((isEditAvailable$ | async)) {
+  @for (relation of relationships; track relation) {
+    <a ngbDropdownItem class="link"
+      [routerLink]="['/edit-item-relationships', contextMenuObject.id , relation.shortname]"
+      [innerHTML]="relation.value ? (relation.value | translate) : ('context-menu.actions.edit-item-relationships.btn.' + relation.shortname | translate)">
+    </a>
+  }
+}

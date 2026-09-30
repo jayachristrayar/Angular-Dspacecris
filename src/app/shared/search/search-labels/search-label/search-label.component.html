@@ -1,0 +1,10 @@
+@let filterLabel = filterLabel$ | async;
+<a class="badge bg-primary me-1 mb-1 text-capitalize"
+   [attr.aria-label]="'search.filters.remove' | translate:{ type: ('search.filters.applied.f.' + appliedFilter.filter) | translate, value: filterLabel }"
+   [routerLink]="searchLink"
+   [queryParams]="(removeParameters$ | async)">
+  <span class="d-flex">
+    <span class="flex-grow-1 text-start">{{ ('search.filters.applied.f.' + appliedFilter.filter) | translate}}{{'search.filters.applied.operator.' + appliedFilter.operator | translate}}: {{'search.filters.' + appliedFilter.filter + '.' + filterLabel | translate: { default: filterLabel } }}</span>
+    <span class="ps-1" aria-hidden="true">×</span>
+  </span>
+</a>

@@ -1,0 +1,254 @@
+:host {
+
+  /*
+   * DOMIDEXX HEADER / NAVIGATION VARIABLES
+   */
+
+  --ds-header-navbar-border-bottom-style:
+    solid var(--ds-header-navbar-border-bottom-height)
+    var(--ds-header-navbar-border-bottom-color);
+
+  --ds-expandable-navbar-border-top-style:
+    solid var(--ds-expandable-navbar-border-top-height)
+    var(--ds-expandable-navbar-border-top-color);
+
+  --ds-expandable-navbar-height:
+    calc(100vh - var(--ds-header-height));
+
+
+  /*
+   * DOMIDEXX NAVIGATION COLOURS
+   */
+
+  --ds-navbar-link-color: #FFFFFF;
+  --ds-navbar-link-color-hover: #2DA9DF;
+
+  /*
+   * Mobile navigation
+   */
+
+  --ds-expandable-navbar-bg: #123044;
+  --ds-expandable-navbar-border-top-color: #F2B321;
+
+  /*
+   * Header border
+   */
+
+  --ds-header-navbar-border-bottom-color: #F2B321;
+
+
+  /*
+   * HEADER / NAVIGATION WRAPPER
+   */
+
+  div#header-navbar-wrapper {
+
+    // The header-navbar-wrapper should not have a z-index,
+    // otherwise it would cover the media viewer despite
+    // its higher z-index.
+
+    position: relative;
+
+    border-bottom:
+      var(--ds-header-navbar-border-bottom-style);
+
+
+    /*
+     * MOBILE COLLAPSIBLE NAVBAR
+     */
+
+    div#mobile-navbar-wrapper {
+
+      width: 100%;
+
+      background-color:
+        var(--ds-expandable-navbar-bg);
+
+      position: absolute;
+
+      z-index: var(--ds-nav-z-index);
+
+      overflow: hidden;
+
+
+      nav#collapsible-mobile-navbar {
+
+        min-height:
+          var(--ds-expandable-navbar-height);
+
+        height: auto;
+
+        border-bottom:
+          var(--ds-header-navbar-border-bottom-style);
+      }
+    }
+  }
+
+
+  /*
+   * MENU ITEMS
+   */
+
+  ::ng-deep {
+
+    .ds-menu-item,
+    .ds-menu-toggler-wrapper {
+      text-decoration: none;
+    }
+
+
+    /*
+     * DESKTOP NAVIGATION
+     */
+
+    nav#desktop-navbar {
+
+      #main-site-navigation {
+
+        /*
+         * Desktop menu
+         */
+
+        .ds-menu-item-wrapper,
+        .ds-menu-item,
+        .ds-menu-toggler-wrapper {
+
+          display: flex;
+
+          align-items: center;
+
+          height: 100%;
+        }
+
+
+        /*
+         * Top-level menu items
+         */
+
+        .ds-menu-item {
+
+          padding:
+            var(--ds-navbar-item-vertical-padding)
+            var(--ds-navbar-item-horizontal-padding);
+
+          color:
+            #FFFFFF !important;
+
+          transition:
+            color 0.2s ease,
+            background-color 0.2s ease;
+        }
+
+
+        /*
+         * Menu text + dropdown togglers
+         */
+
+        .ds-menu-item,
+        .ds-menu-toggler-wrapper {
+
+          color:
+            #FFFFFF !important;
+
+
+          &:hover,
+          &:focus {
+
+            color:
+              #2DA9DF !important;
+          }
+        }
+
+
+        /*
+         * Active menu
+         */
+
+        .ds-menu-item.active,
+        .ds-menu-item[aria-current="page"] {
+
+          color:
+            #F2B321 !important;
+        }
+
+
+        /*
+         * DESKTOP SUBMENU
+         */
+
+        .dropdown-menu {
+
+          background-color:
+            #FFFFFF;
+
+          border:
+            1px solid #E2E8F0;
+
+          box-shadow:
+            0 8px 20px rgba(18, 48, 68, 0.15);
+
+
+          .ds-menu-item {
+
+            color:
+              #334155 !important;
+
+            background-color:
+              transparent;
+
+            padding:
+              var(--ds-navbar-dropdown-item-vertical-padding)
+              var(--ds-navbar-dropdown-item-horizontal-padding);
+
+
+            &:hover,
+            &:focus {
+
+              color:
+                #2DA9DF !important;
+
+              background-color:
+                #F5F9FC;
+            }
+          }
+        }
+      }
+    }
+
+
+    /*
+     * MOBILE NAVIGATION
+     */
+
+    nav#collapsible-mobile-navbar {
+
+      border-top:
+        var(--ds-expandable-navbar-border-top-style);
+
+      padding-top:
+        var(--ds-expandable-navbar-padding-top);
+
+
+      #main-site-navigation {
+
+        .ds-menu-item {
+
+          padding:
+            var(--ds-expandable-navbar-item-vertical-padding)
+            0;
+
+          color:
+            #FFFFFF !important;
+
+
+          &:hover,
+          &:focus {
+
+            color:
+              #2DA9DF !important;
+          }
+        }
+      }
+    }
+  }
+}

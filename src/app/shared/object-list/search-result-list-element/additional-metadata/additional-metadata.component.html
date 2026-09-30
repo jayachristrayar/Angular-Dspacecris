@@ -1,0 +1,79 @@
+@if (additionalMetadataFields) {
+  @for (metadataFieldConfiguration of (additionalMetadataFields ?? []); track $index) {
+    @for (metadataItem of (metadataFieldConfiguration ?? []); track $index) {
+      <div [ngClass]="{'d-inline-block me-1': metadataFieldConfiguration.length > 1}">
+
+        <ng-template #label>
+          <span class="fw-bold me-1 text-muted">{{metadataItem.label | translate}}:</span>
+        </ng-template>
+
+        @for (
+          metadataValue of (metadataItem.startFromLast
+            ? object.allMetadata(metadataItem.name).reverse()
+            : object.allMetadata(metadataItem.name) ?? []);
+          let f = $first; let l = $last; let i = $index; track $index
+        ) {
+          @if (!metadataItem.limitTo || (i < metadataItem.limitTo)) {
+
+            @if (metadataItem.label && metadataRenderingType(metadataItem) !== 'currentRole' && metadataRenderingType(metadataItem) !== 'lastRole') {
+              <ng-container [ngTemplateOutlet]="label"></ng-container>
+            }
+
+            @if (metadataItem.prefix) { {{ metadataItem.prefix }} }
+
+            @switch (metadataRenderingType(metadataItem)) {
+              @case ('crisref') {
+                <ds-metadata-link-view [item]="object" [metadata]="metadataValue"></ds-metadata-link-view>
+              }
+
+              @case ('link') {
+                @let linkInfo = linkData(metadataItem, metadataValue);
+                <a href="{{linkInfo.href}}" target="_blank" [innerHTML]="linkInfo.text"></a>
+              }
+
+              @case ('identifier') {
+                @let identifierInfo = identifierData(metadataItem, metadataValue);
+                <a href="{{identifierInfo.href}}" target="_blank" [innerHTML]="identifierInfo.text"></a>
+              }
+
+              @case ('valuepair') {
+                {{ valuepairData(metadataValue, metadataRenderingSubtype(metadataItem)) | async }}
+              }
+
+              @case ('currentRole') {
+                @let currentRole = currentRoleData(object);
+                @if (f && currentRole) {
+                  <ng-container [ngTemplateOutlet]="label"></ng-container>
+                  {{ currentRole }}
+                }
+              }
+
+              @case ('lastRole') {
+                @let lastRole = lastRoleData(object);
+                @if (f && lastRole) {
+                  <ng-container [ngTemplateOutlet]="label"></ng-container>
+                  {{ lastRole }}
+                }
+              }
+
+              @case ('date') {
+                <span class="metadata">{{ metadataValue.value | date:dateFormat }}</span>
+              }
+
+              @default {
+                <span class="metadata" [innerHTML]="metadataValue.value"></span>
+              }
+            }
+
+            @if (metadataItem.suffix) { {{ metadataItem.suffix }} }
+
+            @if (!l && (!metadataItem.limitTo || (i !== metadataItem.limitTo - 1))) {
+              <ng-container>;&nbsp;</ng-container>
+            }
+
+          }
+        }
+      </div>
+    }
+  }
+}

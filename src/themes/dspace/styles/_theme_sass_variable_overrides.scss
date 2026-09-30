@@ -1,0 +1,84 @@
+// DSpace works with CSS variables for its own components, and has a mapping of all bootstrap Sass
+// variables to CSS equivalents (see src/styles/_bootstrap_variables_mapping.scss). However Bootstrap
+// still uses Sass variables internally. So if you want to override Bootstrap (or other sass
+// variables) you can do so here. Their CSS counterparts will include the changes you make here.
+
+// When this file is going to be compiled, internal Bootstrap variables won't have been declared yet,
+// therefore if you want to use any Bootstrap variable you also need to declare it here.
+
+// All SASS variables from the base theme are also included here. Do not use the '!default' flag
+// here if you want to override them.
+
+
+/*** FONT FAMILIES ***/
+
+@import './../../../styles/_fonts.scss';
+
+$font-family-sans-serif: 'Nunito', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+/*** SEMANTIC COLOR SCHEME ***/
+
+// Gray scale
+//$white:    #fff;
+//$gray-100: #f8f9fa;
+//$gray-200: #e9ecef;
+//$gray-300: #dee2e6;
+//$gray-400: #ced4da;
+//$gray-500: #adb5bd;
+//$gray-600: #6c757d;
+//$gray-700: #495057;
+//$gray-800: #343a40;
+//$gray-900: #212529;
+//$black:    #000;
+
+// Other colors
+//$blue:    #007bff !default;
+//$indigo:  #6610f2 !default;
+//$purple:  #6f42c1 !default;
+//$pink:    #e83e8c !default;
+//$red:     #dc3545 !default;
+//$orange:  #fd7e14 !default;
+//$yellow:  #ffc107 !default;
+//$green:   #28a745 !default;
+//$teal:    #20c997 !default;
+//$cyan:    #17a2b8 !default;
+
+// Override semantic colors here
+$primary:   #2DA9DF;  // Domidexx Blue
+$secondary: #176B87;  // Deep Blue
+$success:   #2E9B62;  // Digital Green
+$info:      #1976B8;  // Technology Blue
+$warning:   #F2B321;  // Domidexx Gold
+$danger:    #D64545;  // Alert Red
+$light:     #F5F9FC;  // Soft Background
+$dark:      #123044;  // Deep Navy
+
+// Add new semantic colors here
+$theme-custom-semantic-colors: (
+);
+
+
+/*** OTHER BOOTSTRAP VARIABLES ***/
+
+$min-contrast-ratio: 2.06 !default;
+
+$body-color: #334155;       // Domidexx Dark Slate
+
+$link-color: #2DA9DF;       // Domidexx Blue
+$link-decoration: none;
+$link-hover-color: darken($link-color, 15%);
+$link-hover-decoration: underline;
+
+$table-accent-bg: #F1F7FA;  // Soft blue background
+$table-hover-bg: #E2F3F9;   // Light blue hover
+
+$navbar-dark-color: #fff;
+
+
+/*** CUSTOM DSPACE VARIABLES ***/
+
+$ds-home-news-link-color: #2E9B62;              // Digital Green
+$ds-header-navbar-border-bottom-color: #F2B321; // Domidexx Gold
+
+$ds-breadcrumb-link-color: #2DA9DF !default;    // Domidexx Blue
+$ds-breadcrumb-link-active-color: #176B87 !default; // Deep Blue

@@ -1,0 +1,25 @@
+@if ((loading | async) || (isAuthenticated | async)) {
+  <ds-loading class="m-5"></ds-loading>
+}
+@if ((loading | async) !== true && (isAuthenticated | async) !== true) {
+  <div class="px-4 py-3 mx-auto login-container">
+    @for (authMethod of (authMethods | async); track authMethod; let last = $last) {
+      <ds-log-in-container [authMethod]="authMethod" [isStandalonePage]="isStandalonePage"></ds-log-in-container>
+      @if (!last) {
+        <div class="dropdown-divider my-2"></div>
+      }
+      @if (canShowDivider$ | async) {
+        <div class="mt-2">
+          @if (canRegister$ | async) {
+            <a class="dropdown-item" [routerLink]="[getRegisterRoute()]"
+               [attr.data-test]="'register' | dsBrowserOnly">{{"login.form.new-user" | translate}}</a>
+          }
+          @if (canForgot$ | async) {
+            <a class="dropdown-item" [routerLink]="[getForgotRoute()]"
+               [attr.data-test]="'forgot' | dsBrowserOnly">{{"login.form.forgot-password" | translate}}</a>
+          }
+        </div>
+      }
+    }
+  </div>
+}

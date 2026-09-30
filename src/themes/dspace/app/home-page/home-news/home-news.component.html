@@ -1,0 +1,115 @@
+<div class="background-image-container mt-ncs">
+
+  <div class="container">
+
+    <div class="home-news-content py-4 px-2 py-sm-5 px-sm-0 mt-0 mb-4">
+
+      @if (hasHomeNewsMetadata) {
+
+        <ds-text-section
+          [sectionId]="'site'"
+          [textRowSection]="homeNewsSection"
+          [site]="(site$ | async)">
+        </ds-text-section>
+
+      } @else {
+
+        <div class="domidexx-hero-content">
+
+          <div class="domidexx-eyebrow">
+            DIGITAL REPOSITORY
+          </div>
+
+          <h1 class="domidexx-title">
+            Domidexx Digital Repository
+          </h1>
+
+          <p class="domidexx-lead">
+            Discover, preserve and connect scholarly knowledge
+            through a modern research information platform.
+          </p>
+
+          <p class="domidexx-description">
+            A unified platform for managing, discovering and preserving
+            research outputs, publications, projects and institutional
+            knowledge.
+          </p>
+
+          <div class="domidexx-features">
+
+            <div class="domidexx-feature">
+              <span class="fas fa-search" aria-hidden="true"></span>
+              <span>Discover Research</span>
+            </div>
+
+            <div class="domidexx-feature">
+              <span class="fas fa-archive" aria-hidden="true"></span>
+              <span>Preserve Knowledge</span>
+            </div>
+
+            <div class="domidexx-feature">
+              <span class="fas fa-project-diagram" aria-hidden="true"></span>
+              <span>Connect Research</span>
+            </div>
+
+          </div>
+
+          <div class="domidexx-hero-actions">
+
+            <a
+              href="https://domidexx.in/about"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="domidexx-btn domidexx-btn-outline">
+              <span class="fas fa-building" aria-hidden="true"></span>
+              <span>About Us</span>
+            </a>
+
+            <a
+              href="https://domidexx.in/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="domidexx-btn domidexx-btn-primary">
+              <span class="fas fa-external-link-alt" aria-hidden="true"></span>
+              <span>Visit Domidexx</span>
+            </a>
+
+          </div>
+
+        </div>
+
+      }
+
+    </div>
+
+  </div>
+
+  <picture class="background-image">
+
+    <source
+      type="image/webp"
+      srcset="
+        assets/dspace/images/banner.webp 2000w,
+        assets/dspace/images/banner-half.webp 1200w,
+        assets/dspace/images/banner-tall.webp 768w
+      ">
+
+    <source
+      type="image/jpeg"
+      srcset="
+        assets/dspace/images/banner.jpg 2000w,
+        assets/dspace/images/banner-half.jpg 1200w,
+        assets/dspace/images/banner-tall.jpg 768w
+      ">
+
+    <img
+      alt=""
+      [src]="'assets/dspace/images/banner.jpg'"/>
+
+  </picture>
+
+  <small class="credits">
+    Domidexx Digital Repository
+  </small>
+
+</div>

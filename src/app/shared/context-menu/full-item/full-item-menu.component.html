@@ -1,0 +1,5 @@
+@if (!isSameView(contextMenuObject)) {
+  <button class="dropdown-item" [routerLink]="getItemFullPageRoute(contextMenuObject)"
+    [innerHTML]="'context-menu.actions.show-all-metadata' | translate">
+  </button>
+}

@@ -1,0 +1,73 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.collaboration-network {
+  width: 100%;
+  min-height: 520px;
+}
+
+.network-loading,
+.network-empty {
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.network-canvas {
+  width: 100%;
+  overflow: hidden;
+}
+
+.network-canvas svg {
+  display: block;
+  width: 100%;
+  min-height: 500px;
+}
+
+.network-link {
+  stroke: #9aa4b2;
+  opacity: 0.65;
+}
+
+.network-node {
+  cursor: pointer;
+}
+
+.network-node circle {
+  fill: #ffffff;
+  stroke: #2da9df;
+  stroke-width: 2;
+}
+
+.network-node.central-node circle {
+  fill: #2da9df;
+  stroke: #1b7fa9;
+  stroke-width: 3;
+}
+
+.network-node text {
+  font-size: 13px;
+  fill: #263238;
+  pointer-events: none;
+}
+
+.network-node.central-node text {
+  font-weight: 700;
+}
+
+.publication-count {
+  font-size: 11px !important;
+  fill: #6c757d !important;
+}
+
+.network-legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 20px;
+  border-top: 1px solid #dee2e6;
+  font-size: 13px;
+  color: #6c757d;
+}
+

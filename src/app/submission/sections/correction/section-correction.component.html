@@ -1,0 +1,157 @@
+@if (showTable()) {
+  @if ((correctionMetadataData$ | async)?.length > 0) {
+    <ds-alert [type]="'alert-info'" [content]="'submission.sections.correction.column.metadata.info'"></ds-alert>
+    <table  class="table table-striped correction-item-table">
+      <thead>
+        <tr>
+          <th>{{'submission.sections.correction.column.metadata' | translate}}</th>
+          <th>{{'submission.sections.correction.column.previous-value' | translate}}</th>
+          <th>{{'submission.sections.correction.column.current-value'|translate}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (correction of (correctionMetadataData$ | async); track correction) {
+          <tr class="correction-row">
+            <td>{{correction.label}} ({{correction.metadata}})</td>
+            <td>
+              @if (correction.oldValues.length === 0) {
+                -
+              }
+              @if (correction.oldValues.length === 1) {
+                {{correction.oldValues[0]}}
+              }
+              @if (correction.oldValues.length>1) {
+                <ul>
+                  @for (value of correction.oldValues; track value) {
+                    <li>
+                      {{value}}
+                    </li>
+                  }
+                </ul>
+              }
+            </td>
+            <td>
+              @if (correction.newValues.length === 0) {
+                -
+              }
+              @if (correction.newValues.length === 1) {
+                {{correction.newValues[0]}}
+              }
+              @if (correction.newValues.length>1) {
+                <ul>
+                  @for (value of correction.newValues; track value) {
+                    <li>
+                      {{value}}
+                    </li>
+                  }
+                </ul>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+  <br/>
+  @if ((correctionBitstreamData$ | async)?.length > 0) {
+    <ds-alert [type]="'alert-info'" [content]="'submission.sections.correction.column.file.info'"></ds-alert>
+    @for (bitstream of (correctionBitstreamData$ | async); track bitstream) {
+      <table class="table table-striped m-0 correction-bitstream-table">
+        <thead>
+          <tr>
+            <th colspan="3">{{bitstream.filename}} - {{getFileOperationLabel(bitstream.operationType) | translate}}</th>
+          </tr>
+        </thead>
+      </table>
+      @if (bitstream.metadata.length > 0 && bitstream.operationType === operationType.MODIFY) {
+        <table
+          class="table table-striped m-0 correction-bitstream-metadata-table">
+          <thead>
+            <tr>
+              <th>{{'submission.sections.correction.column.metadata' | translate}}</th>
+              <th>{{'submission.sections.correction.column.previous-value' | translate}}</th>
+              <th>{{'submission.sections.correction.column.current-value'|translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (metadata of bitstream.metadata; track metadata) {
+              <tr class="correction-row">
+                <td>{{metadata.label}} ({{metadata.metadata}})</td>
+                <td>
+                  @if (metadata.oldValues.length === 0) {
+                    -
+                  }
+                  @if (metadata.oldValues.length === 1) {
+                    {{metadata.oldValues[0]}}
+                  }
+                  @if (metadata.oldValues.length>1) {
+                    <ul>
+                      @for (value of metadata.oldValues; track value) {
+                        <li>
+                          {{value}}
+                        </li>
+                      }
+                    </ul>
+                  }
+                </td>
+                <td>
+                  @if (metadata.newValues.length === 0) {
+                    -
+                  }
+                  @if (metadata.newValues.length === 1) {
+                    {{metadata.newValues[0]}}
+                  }
+                  @if (metadata.newValues.length>1) {
+                    <ul>
+                      @for (value of metadata.newValues; track value) {
+                        <li>
+                          {{value}}
+                        </li>
+                      }
+                    </ul>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      @if (bitstream.policies.length > 0 && bitstream.operationType === operationType.MODIFY) {
+        <table
+          class="table table-striped m-0 correction-bitstream-policies-table">
+          <thead>
+            <tr>
+              <th>{{'submission.sections.correction.column.policy' | translate}}</th>
+              <th>{{'submission.sections.correction.column.previous-value' | translate}}</th>
+              <th>{{'submission.sections.correction.column.current-value'|translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (policy of bitstream.policies; track policy) {
+              <tr class="correction-row">
+                <td>{{policy.label}}</td>
+                <td>
+                  @if (!policy.oldValue) {
+                    -
+                  }
+                  @if (policy.oldValue) {
+                    {{policy.oldValue}}
+                  }
+                </td>
+                <td>
+                  @if (!policy.newValue) {
+                    -
+                  }
+                  @if (policy.newValue) {
+                    {{policy.newValue}}
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      }
+      <br/>
+    }
+  }
+}
