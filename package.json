@@ -168,7 +168,7 @@
     "mirador-dl-plugin": "^0.13.0",
     "mirador-imagecropper": "^0.1.9",
     "mirador-share-plugin": "^0.16.0",
-    "morgan": "^1.10.1",
+    "morgan": "^1.12.1",
     "ng2-file-upload": "9.0.0",
     "ng2-google-charts": "^7.0.0",
     "ng2-nouislider": "^2.0.0",
