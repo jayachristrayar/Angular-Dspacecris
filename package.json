@@ -128,7 +128,7 @@
     "@ngx-translate/core": "^17.0.0",
     "@nicky-lenaers/ngx-scroll-to": "^14.0.0",
     "@swimlane/ngx-charts": "^20.4.1",
-    "@terraformer/wkt": "^2.2.1",
+    "@terraformer/wkt": "^2.2.2",
     "altcha": "^2.2.4",
     "angulartics2": "^12.2.0",
     "axios": "^1.10.0",
